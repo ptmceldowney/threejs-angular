@@ -119,6 +119,12 @@ export class EngineService implements OnDestroy {
       (<THREE.Mesh>carModel.getObjectByName('body')).material = bodyMaterial;
       (<THREE.Mesh>carModel.getObjectByName('rim_fl')).material =
         detailsMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('rim_fr')).material =
+        detailsMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('rim_rl')).material =
+        detailsMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('rim_rr')).material =
+        detailsMaterial;
       (<THREE.Mesh>carModel.getObjectByName('glass')).material = glassMaterial;
 
       this.wheels.push(
