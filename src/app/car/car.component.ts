@@ -3,10 +3,10 @@ import { EngineService } from '../services/engine.service';
 
 @Component({
   selector: 'app-cube',
-  templateUrl: './cube.component.html',
-  styleUrls: ['./cube.component.scss'],
+  templateUrl: './car.component.html',
+  styleUrls: ['./car.component.scss'],
 })
-export class CubeComponent implements OnInit {
+export class CarComponent implements OnInit {
   @ViewChild('rendererCanvas', { static: true })
   public rendererCanvas: ElementRef<HTMLCanvasElement>;
 
