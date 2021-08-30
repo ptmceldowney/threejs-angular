@@ -1,0 +1,14 @@
+.info {
+  position: absolute;
+  top: 20px;
+  display: flex;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+
+  .colorPicker {
+    margin: 0 20px;
+  }
+}

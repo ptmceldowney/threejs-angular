@@ -1,3 +1,22 @@
 <div class="engine-wrapper">
+  <div class="info">
+    <span class="colorPicker">
+      <input id="body-color" type="color" value="#ff0000" /><br />
+      Body
+    </span>
+    <span class="colorPicker">
+      <input id="details-color" type="color" value="#ffffff" /><br />
+      Details
+    </span>
+    <span class="colorPicker">
+      <input
+        id="glass-color"
+        type="color"
+        value="#ffffff"
+        onchange="bodyColor"
+      /><br />
+      Glass
+    </span>
+  </div>
   <canvas #rendererCanvas id="renderCanvas"></canvas>
 </div>

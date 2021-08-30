@@ -48,6 +48,22 @@ export class EngineService implements OnDestroy {
       transmission: 0.9,
       transparent: true,
     });
+
+    const bodyColorInput = document.getElementById('body-color');
+    bodyColorInput.addEventListener('change', function (e) {
+      bodyMaterial.color.set((<HTMLInputElement>e.target).value);
+    });
+
+    const detailsColorInput = document.getElementById('details-color');
+    detailsColorInput.addEventListener('input', function (e) {
+      detailsMaterial.color.set((<HTMLInputElement>e.target).value);
+    });
+
+    const glassColorInput = document.getElementById('glass-color');
+    glassColorInput.addEventListener('input', function (e) {
+      glassMaterial.color.set((<HTMLInputElement>e.target).value);
+    });
+
     this.canvas = canvas.nativeElement;
 
     this.renderer = new THREE.WebGLRenderer({
@@ -100,9 +116,10 @@ export class EngineService implements OnDestroy {
 
     loader.load('assets/gltf/ferrari.glb', gltf => {
       const carModel = gltf.scene.children[0];
-      carModel.getObjectByName('body').customDepthMaterial = bodyMaterial;
-      carModel.getObjectByName('rim_fl').customDepthMaterial = detailsMaterial;
-      carModel.getObjectByName('glass').customDepthMaterial = glassMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('body')).material = bodyMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('rim_fl')).material =
+        detailsMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('glass')).material = glassMaterial;
 
       this.wheels.push(
         carModel.getObjectByName('wheel_fl'),
