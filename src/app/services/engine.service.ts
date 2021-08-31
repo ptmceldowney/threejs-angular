@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
+import { Sky } from 'three/examples/jsm/objects/Sky';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -15,6 +16,8 @@ export class EngineService implements OnDestroy {
   private grid: THREE.GridHelper;
   private wheels: THREE.Object3D[] = [];
   private frameId: number = null;
+  private sun: THREE.Vector3;
+  private sky: Sky;
 
   public constructor(private ngZone: NgZone) {}
 
@@ -99,11 +102,39 @@ export class EngineService implements OnDestroy {
     this.scene.environment = pmrremGenerator.fromScene(
       new RoomEnvironment()
     ).texture;
-    this.scene.fog = new THREE.Fog(0xeeeeee, 10, 50);
+    //this.scene.fog = new THREE.Fog(0xeeeeee, 10, 50);
 
     // grid
-    this.grid = new THREE.GridHelper(100, 40, 0x000000, 0x000000);
+    this.grid = new THREE.GridHelper(100, 40, 0x2c2c2c, 0x2c2c2c);
     this.scene.add(this.grid);
+
+    // sun
+    this.sun = new THREE.Vector3();
+
+    // skybox
+    this.sky = new Sky();
+    this.sky.scale.setScalar(10000);
+    this.scene.add(this.sky);
+
+    const skyUniforms = this.sky.material.uniforms;
+    skyUniforms['turbidity'].value = 10;
+    skyUniforms['rayleigh'].value = 2;
+    skyUniforms['mieCoefficient'].value = 0.005;
+    skyUniforms['mieDirectionalG'].value = 0.8;
+
+    const parameters = {
+      elevation: 2,
+      azimuth: 180,
+    };
+
+    const updateSun = () => {
+      const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
+      const theta = THREE.MathUtils.degToRad(parameters.azimuth);
+
+      this.sun.setFromSphericalCoords(1, phi, theta);
+      this.sky.material.uniforms['sunPosition'].value.copy(this.sun);
+    };
+    updateSun();
 
     // car
     const shadow = new THREE.TextureLoader().load('assets/gltf/ferrari_ao.png');
@@ -125,6 +156,9 @@ export class EngineService implements OnDestroy {
         detailsMaterial;
       (<THREE.Mesh>carModel.getObjectByName('rim_rr')).material =
         detailsMaterial;
+      (<THREE.Mesh>carModel.getObjectByName('leather')).material =
+        detailsMaterial;
+
       (<THREE.Mesh>carModel.getObjectByName('glass')).material = glassMaterial;
 
       this.wheels.push(
