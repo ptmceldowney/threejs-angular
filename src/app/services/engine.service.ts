@@ -19,6 +19,8 @@ export class EngineService implements OnDestroy {
   private sun: THREE.Vector3;
   private sky: Sky;
 
+  strDownloadMime = 'image/octet-stream';
+
   public constructor(private ngZone: NgZone) {}
 
   public ngOnDestroy(): void {
@@ -73,6 +75,7 @@ export class EngineService implements OnDestroy {
       canvas: this.canvas,
       alpha: true, // transparent background
       antialias: true, // smooth edges
+      preserveDrawingBuffer: true,
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -97,8 +100,8 @@ export class EngineService implements OnDestroy {
 
     // create the scene
     const pmrremGenerator = new THREE.PMREMGenerator(this.renderer);
+
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xeeeeee);
     this.scene.environment = pmrremGenerator.fromScene(
       new RoomEnvironment()
     ).texture;
@@ -225,5 +228,30 @@ export class EngineService implements OnDestroy {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(width, height);
+  }
+
+  public takeScreenshot(): void {
+    console.log('taking photo');
+    let imgData, imgNode;
+
+    try {
+      let strMime = 'image/jpeg';
+      imgData = this.renderer.domElement.toDataURL(strMime);
+      this.saveFile(imgData.replace(strMime, this.strDownloadMime), 'test.jpg');
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  }
+
+  private saveFile(strData, fn) {
+    let link = document.createElement('a');
+    if (typeof link.download == 'string') {
+      document.body.appendChild(link);
+      link.download = fn;
+      link.href = strData;
+      link.click();
+      document.body.removeChild(link);
+    }
   }
 }

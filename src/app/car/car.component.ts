@@ -16,4 +16,8 @@ export class CarComponent implements OnInit {
     this.engServ.createScene(this.rendererCanvas);
     this.engServ.animate();
   }
+
+  public takeScreenshot(): void {
+    this.engServ.takeScreenshot();
+  }
 }
