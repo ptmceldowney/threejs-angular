@@ -10,14 +10,16 @@
   .colorPicker {
     margin: 0 20px;
   }
+}
 
-  .screenshot {
-    outline: none;
-    border: none;
-    padding: 10px;
-    background: #000;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.screenshot {
+  position: absolute;
+  inset: auto 50px 20px auto;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
 }
