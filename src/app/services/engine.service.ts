@@ -95,6 +95,7 @@ export class EngineService implements OnDestroy {
 
     // controls
     this.controls = new OrbitControls(this.camera, this.canvas);
+    this.controls.maxPolarAngle = Math.PI / 2;
     this.controls.target.set(0, 0.5, 0);
     this.controls.update();
 
